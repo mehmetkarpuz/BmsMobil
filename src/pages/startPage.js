@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, Alert } from 'react-native';
 import { Container, Header, Content, Item, Input, Icon, Button } from 'native-base';
 import { navigation } from 'react-navigation';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -16,9 +16,15 @@ export default class StartPage extends Component {
     }
 
     goAraclist() {
+        Alert.alert("Bu modül henüz aktif değildir.");
     }
 
     goSuruclist() {
+        Alert.alert("Bu modül henüz aktif değildir.");
+    }
+
+    bindTaseronList(){
+        Alert.alert("Bu modül henüz aktif değildir.");
     }
 
     render() {
@@ -43,8 +49,8 @@ export default class StartPage extends Component {
                                 </Button>
                             </Col>
                             <Col size={45} style={{ alignContent: "center", alignItems: "center" }}>
-                                <Button rounded light onPress={this.goAraclist.bind(this)} style={styles.puantajBtn}>
-                                    <Text style={styles.puantajBtnText} >Araç</Text>
+                                <Button rounded light onPress={this.bindTaseronList.bind(this)} style={styles.puantajBtn}>
+                                    <Text style={styles.puantajBtnText}>Taşeron</Text>
                                 </Button>
                             </Col>
                         </Row>
@@ -55,7 +61,10 @@ export default class StartPage extends Component {
                                     <Text style={styles.puantajBtnText} >Sürücü</Text>
                                 </Button>
                             </Col>
-                            <Col size={45}>
+                            <Col size={45} style={{ alignContent: "center", alignItems: "center" }}>
+                                <Button rounded light onPress={this.goAraclist.bind(this)} style={styles.puantajBtn}>
+                                    <Text style={styles.puantajBtnText} >Araç</Text>
+                                </Button>
                             </Col>
                         </Row>
                     </Grid>

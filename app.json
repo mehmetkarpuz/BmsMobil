@@ -23,7 +23,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "bms.cetur.com.tr"
     },
     "android": {
       "package": "bms.cetur.com.tr"

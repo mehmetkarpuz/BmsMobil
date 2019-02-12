@@ -433,7 +433,7 @@ export default class PuantajListPage extends Component {
                     }}>
                     <Content>
                         <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 200 }}>
-                            <Row size={20} style={styles.detailRows}>
+                            <Row size={15} style={styles.detailRows}>
                                 <Col size={100}>
                                     <Picker
                                         mode="dropdown"
@@ -452,7 +452,7 @@ export default class PuantajListPage extends Component {
                                     </Picker>
                                 </Col>
                             </Row>
-                            <Row size={20} style={styles.detailRows}>
+                            <Row size={15} style={styles.detailRows}>
                                 <Col size={100}>
                                     <Picker
                                         mode="dropdown"
@@ -465,7 +465,7 @@ export default class PuantajListPage extends Component {
                                     </Picker>
                                 </Col>
                             </Row>
-                            <Row size={20} style={styles.detailRows}>
+                            <Row size={15} style={styles.detailRows}>
                                 <Col size={100}>
                                     <Picker
                                         mode="dropdown"
@@ -484,7 +484,7 @@ export default class PuantajListPage extends Component {
                                     </Picker>
                                 </Col>
                             </Row>
-                            <Row size={20} style={styles.detailRows}>
+                            <Row size={15} style={styles.detailRows}>
                                 <Col size={100}>
                                     <Picker
                                         mode="dropdown"
@@ -502,7 +502,7 @@ export default class PuantajListPage extends Component {
                                     </Picker>
                                 </Col>
                             </Row>
-                            <Row size={30} style={{ marginBottom: 20, marginTop:10 }}>
+                            <Row size={20} style={{ marginBottom: 20, marginTop:10 }}>
                                 <Col size={100} style={{ justifyContent: "center" }}>
                                     <Button iconLeft rounded light block onPress={() => this.openTimePicker()}>
                                         <Icon name='clock' />
@@ -510,7 +510,7 @@ export default class PuantajListPage extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                            <Row size={30}>
+                            <Row size={20}>
                                 <Col size={45}>
                                     <Button block rounded light
                                         onPress={() => {
