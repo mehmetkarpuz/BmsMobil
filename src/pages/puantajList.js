@@ -43,6 +43,7 @@ export default class PuantajListPage extends Component {
             selectedDagitmaToplama: "1",
             pauntajKisitiVarmi: false,
             datePickerDefaultDate: new Date(),
+            priceChange: false,
 
             isPuantajDetailModalVisible: false,
             guzergahDetailListTable: [],
@@ -268,6 +269,54 @@ export default class PuantajListPage extends Component {
         });
     }
 
+    renderPricePickerRows() {
+        if (this.state.priceChange == true) {
+            return (
+                <View>
+                    <Row size={15} style={styles.detailRows}>
+                        <Col size={100}>
+                            <Picker
+                                mode="dropdown"
+                                iosIcon={<Icon name="ios-arrow-down-outline" />}
+                                placeholderStyle={{ color: "#bfc6ea" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.selectedGuzergahFiyati}
+                                onValueChange={(val) => {
+                                    this.setState({
+                                        selectedGuzergahFiyati: val
+                                    });
+                                }} >
+                                <Picker.Item label="Müşteri Kapasitesi" value="-11" />
+                                <Picker.Item label="Fiyat Uygulanmasın" value="-1" />
+                                {this.state.guzergahFiyatListPickerOptions}
+                            </Picker>
+                        </Col>
+                    </Row>
+                    <Row size={15} style={styles.detailRows}>
+                        <Col size={100}>
+                            <Picker
+                                mode="dropdown"
+                                iosIcon={<Icon name="ios-arrow-down-outline" />}
+                                placeholderStyle={{ color: "#bfc6ea" }}
+                                placeholderIconColor="#007aff"
+                                selectedValue={this.state.selectedAracFiyati}
+                                onValueChange={(val) => {
+                                    this.setState({
+                                        selectedAracFiyati: val
+                                    });
+                                }}>
+                                <Picker.Item label="Araç Fiyatı" value="-11" />
+                                {this.state.aracFiyatListPickerOptions}
+                            </Picker>
+                        </Col>
+                    </Row>
+                </View>
+            )
+        } else {
+            return null;
+        }
+    }
+
     deletePuantaj(plaka, guzergahId, seferId) {
         var request = new DeletePuantajRequestModel();
         request.GuzergahId = guzergahId;
@@ -465,44 +514,21 @@ export default class PuantajListPage extends Component {
                                     </Picker>
                                 </Col>
                             </Row>
-                            <Row size={15} style={styles.detailRows}>
-                                <Col size={100}>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="ios-arrow-down-outline" />}
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.selectedGuzergahFiyati}
-                                        onValueChange={(val) => {
+                            <Row size={10} style={styles.detailRowsPrice}>
+                                <Col size={75} style={{ paddingLeft: 7, justifyContent: "center" }} >
+                                    <Text>Fiyat Değişikliği İstiyorum :</Text>
+                                </Col>
+                                <Col size={25} style={{ justifyContent: "center", alignItems: "center", alignContent: "center" }}>
+                                    <Switch style={{ transform: [{ scaleX: 1.4 }, { scaleY: 1.4 }] }}
+                                        value={this.state.priceChange} onValueChange={(val) => {
                                             this.setState({
-                                                selectedGuzergahFiyati: val
+                                                priceChange: val
                                             });
-                                        }} >
-                                        <Picker.Item label="Müşteri Kapasitesi" value="-11" />
-                                        <Picker.Item label="Fiyat Uygulanmasın" value="-1" />
-                                        {this.state.guzergahFiyatListPickerOptions}
-                                    </Picker>
+                                        }} />
                                 </Col>
                             </Row>
-                            <Row size={15} style={styles.detailRows}>
-                                <Col size={100}>
-                                    <Picker
-                                        mode="dropdown"
-                                        iosIcon={<Icon name="ios-arrow-down-outline" />}
-                                        placeholderStyle={{ color: "#bfc6ea" }}
-                                        placeholderIconColor="#007aff"
-                                        selectedValue={this.state.selectedAracFiyati}
-                                        onValueChange={(val) => {
-                                            this.setState({
-                                                selectedAracFiyati: val
-                                            });
-                                        }}>
-                                        <Picker.Item label="Araç Fiyatı" value="-11" />
-                                        {this.state.aracFiyatListPickerOptions}
-                                    </Picker>
-                                </Col>
-                            </Row>
-                            <Row size={20} style={{ marginBottom: 20, marginTop:10 }}>
+                            {this.renderPricePickerRows()}
+                            <Row size={20} style={{ marginBottom: 20, marginTop: 10 }}>
                                 <Col size={100} style={{ justifyContent: "center" }}>
                                     <Button iconLeft rounded light block onPress={() => this.openTimePicker()}>
                                         <Icon name='clock' />
@@ -616,5 +642,10 @@ const styles = StyleSheet.create({
     detailRows: {
         borderBottomColor: '#d6d7da',
         borderBottomWidth: 1
+    },
+    detailRowsPrice: {
+        borderBottomColor: '#d6d7da',
+        borderBottomWidth: 1,
+        height: 40
     }
 });
