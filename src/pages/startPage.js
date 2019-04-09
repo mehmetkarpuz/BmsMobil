@@ -16,7 +16,7 @@ export default class StartPage extends Component {
     }
 
     goAraclist() {
-        Alert.alert("Bu modül henüz aktif değildir.");
+        this.props.navigation.navigate('AracList');
     }
 
     goSuruclist() {
