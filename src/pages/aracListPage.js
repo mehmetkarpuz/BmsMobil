@@ -10,6 +10,11 @@ import * as Expo from "expo";
 import TokenRequestModel from '../models/tokenRequestModel';
 import GetAracListBySearchTermRequestModel from '../models/getAracListBySearchTermRequestModel';
 import AracInfoTab from './aractabs/aracInfoTab';
+import AracResimInfoTab from './aractabs/aracResimTab';
+import AracRuhsatTab from './aractabs/aracRuhsatTab';
+import AracSigortaTab from './aractabs/aracSigortaTab';
+import AracIMMSTab from './aractabs/aracIMMSTab';
+import GetAracDetailsByAracId from '../models/getAracDetailsByAracId';
 
 
 export default class AracListPage extends Component {
@@ -20,11 +25,36 @@ export default class AracListPage extends Component {
         this.state = {
             loading: true,
             tokenRequestModel: new TokenRequestModel(),
-            searchTerm: "Araç plakası giriniz",
+            searchTerm: "",
             isAracListModalVisible: false,
             aracListTableData: [],
-            activeTabValue: 0,
-            selectedAracId: "",
+            activeTabValue: -1,
+            selectedAracId: 0,
+            aracDetailResponse: {
+                plaka: "",
+                wehicleRentAmount: "",
+                modelYear: "",
+                gpsBedeli: "",
+                description: "",
+                owner: {
+                    name: "",
+                    surname: ""
+                },
+                wehicleBrand: {
+                    brand: ""
+                },
+                wehicleModel: {
+                    model: "",
+                    wehicleCapacity: {
+                        capacityName: ""
+                    }
+                }
+            },
+            aracResimlerResponse: [],
+            aracRuhsatResimlerResponse: [],
+            aracSigortaResimlerResponse: [],
+            aracImmsResimlerResponse: [],
+            aracSigortaInfo:{}
         };
     }
 
@@ -70,9 +100,113 @@ export default class AracListPage extends Component {
         });
     }
 
-    openTab(tabIndex, aracId) {
-        this.setState({ activeTabValue: tabIndex, selectedAracId: aracId });
+    getAracDetails(aracId) {
+        var request = new GetAracDetailsByAracId();
+        request.Token = this.state.tokenRequestModel.Token;
+        request.AracId = aracId;
+        this.apiServices.getAracDetailsByAracId(request).then(responseJson => {
+            if (responseJson.Data.wehicleList.length > 0) {
+
+                this.setState({
+                    aracDetailResponse: responseJson.Data.wehicleList[0]
+                });
+                this.getAracResimler(aracId);
+                 this.getAracRuhsat(aracId);
+                 this.getAracSigorta(aracId);
+                 this.getAracImms(aracId);
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
     }
+
+    getAracResimler(aracId) {
+        var request = new GetAracDetailsByAracId();
+        request.Token = this.state.tokenRequestModel.Token;
+        request.AracId = aracId;
+        request.SType = "9";
+        request.DType = "9";
+        this.apiServices.getAracResimlerByAracId(request).then(responseJson => {
+            if (responseJson.Data.imageList.length > 0) {
+                this.setState({
+                    aracResimlerResponse: responseJson.Data.imageList,
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    getAracRuhsat(aracId) {
+        var request = new GetAracDetailsByAracId();
+        request.Token = this.state.tokenRequestModel.Token;
+        request.AracId = aracId;
+        this.apiServices.getAracRuhsatByAracId(request).then(responseJson => {
+
+            if (responseJson.Data.imageList.length > 0) {
+                this.setState({
+                    aracRuhsatResimlerResponse: responseJson.Data.imageList,
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    getAracSigorta(aracId) {
+        var request = new GetAracDetailsByAracId();
+        request.Token = this.state.tokenRequestModel.Token;
+        request.AracId = aracId;
+        request.SType = 1;
+        request.DType = "2";
+        this.apiServices.getAracSigortaByAracId(request).then(responseJson => {
+            this.setState({
+                aracSigortaInfo: responseJson.Data.insurance,
+            });
+            if (responseJson.Data.imageList.length > 0) {
+                this.setState({
+                    aracSigortaResimlerResponse: responseJson.Data.imageList,
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    getAracImms(aracId) {
+        var request = new GetAracDetailsByAracId();
+        request.Token = this.state.tokenRequestModel.Token;
+        request.AracId = aracId;
+        request.SType = 2;
+        request.DType = "3";
+        this.apiServices.getAracSigortaByAracId(request).then(responseJson => {
+            if (responseJson.Data.imageList.length > 0) {
+                this.setState({
+                    aracImmsResimlerResponse: responseJson.Data.imageList,
+                });
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+    }
+
+    // openTab(aracId, tabIndex) {
+    //     console.log("tabIndex", tabIndex);
+    //     switch (tabIndex) {
+    //         case 0:
+    //             this.getAracDetails(aracId);
+    //             break;
+    //         case 1:
+    //             this.getAracResimler(aracId);
+    //             break;
+    //         case 2:
+    //             this.getAracRuhsat(aracId);
+    //             break;
+
+    //         default:
+    //             break;
+    //     }
+    // }
 
     render() {
 
@@ -113,27 +247,25 @@ export default class AracListPage extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Tabs initialPage={this.state.activeTabValue}>
+                            <Tabs initialPage={-1} locked="true">
                                 <Tab heading={<TabHeading><Icon name="bus" /></TabHeading>}>
-                                    <AracInfoTab selectedAracId={this.state.selectedAracId}/>
+                                    <AracInfoTab aracDetailResponse={this.state.aracDetailResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon name="camera" /></TabHeading>}>
-                                    <AracInfoTab />
+                                    <AracResimInfoTab aracSigortaInfo={this.state.aracSigortaInfo} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracResimlerResponse={this.state.aracResimlerResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="vcard" /></TabHeading>}>
-                                    <AracInfoTab />
+                                    <AracRuhsatTab aracRuhsatResimlerResponse={this.state.aracRuhsatResimlerResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="shield" /></TabHeading>}>
-                                    <AracInfoTab />
+                                    <AracSigortaTab aracSigortaResimlerResponse={this.state.aracSigortaResimlerResponse}></AracSigortaTab>
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="car" /></TabHeading>}>
-                                    <AracInfoTab />
+                                    <AracIMMSTab aracImmsResimlerResponse={this.state.aracImmsResimlerResponse}></AracIMMSTab>
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="hospital-o" /></TabHeading>}>
-                                    <AracInfoTab />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="file-text" /></TabHeading>}>
-                                    <AracInfoTab />
                                 </Tab>
                             </Tabs>
                         </Row>
@@ -147,7 +279,7 @@ export default class AracListPage extends Component {
                     }}>
                     <Row size={5} style={{ paddingLeft: 20, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
                         <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
-                            <Button iconRight transparent danger onPress={() => {
+                            <Button danger onPress={() => {
                                 this.setState({
                                     isAracListModalVisible: false
                                 });
@@ -168,12 +300,13 @@ export default class AracListPage extends Component {
                     <Row size={85}>
                         <Content>
                             <List dataArray={this.state.aracListTableData}
-                                renderRow={(item) =>
+                                renderRow={(item, sectionID, rowID, higlightRow) =>
                                     <ListItem style={{ padding: 0 }} onPress={() => {
                                         this.setState({
                                             isAracListModalVisible: false
                                         });
-                                        this.openTab("aracinfo", item.AracId);
+                                        this.state.selectedAracId = item.AracId;
+                                        this.getAracDetails(item.AracId);
                                     }}>
                                         <Col size={35} style={{ alignContent: "center" }}>
                                             <Row size={100}><Text>{item.Plaka}</Text></Row>
