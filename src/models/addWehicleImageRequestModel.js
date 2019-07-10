@@ -11,5 +11,5 @@ export default class AddWehicleImageRequestModel extends TokenRequestModel {
     plaka = "";
     entryID = "";
     isDateRequired = "";
-    image = {};
+    image = "";
 }

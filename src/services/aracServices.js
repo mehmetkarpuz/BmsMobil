@@ -70,20 +70,22 @@ export default class AracServices {
     addImage(request) {
         var formData = new FormData();
 
-        // formData.append('token', request.Token);        
         formData.append('file', {
-            uri: request.image 
+            uri : request.image,
+            name: 'd1ae8491-4b47-46e3-8b1f-60cee4af1d7f.jpg',
+            type: 'image/jpg'
         });
-        // formData.append('startDate', request.startDate);
-        // formData.append('endDate', request.endDate);
-        // formData.append('entryID', request.entryID);
-        // formData.append('startEndDocumentType', request.startEndDocumentType);
-        // formData.append('fileLocationType', request.fileLocationType);
-        // formData.append('force', request.force);
-        // formData.append('sigortaID', request.sigortaID);
-        // formData.append('plaka', request.plaka);
-        // formData.append('isDateRequired', request.isDateRequired);
-
+        formData.append('token', request.Token);       
+        formData.append('startDate', request.startDate);
+        formData.append('endDate', request.endDate);
+        formData.append('entryID', request.entryID);
+        formData.append('startEndDocumentType', request.startEndDocumentType);
+        formData.append('fileLocationType', request.fileLocationType);
+        formData.append('force', request.force);
+        formData.append('sigortaID', request.sigortaID);
+        formData.append('plaka', request.plaka);
+        formData.append('isDateRequired', request.isDateRequired);
+        console.log("request", request);
         return fetch(this.env.ServiceUrl + 'Puntaj/AddWehicleImage', {
             method: 'POST',
             headers: {
@@ -92,10 +94,10 @@ export default class AracServices {
             },
             body: formData,
         }).then(function (res) {
-            console.log("res",res);
+            console.log("res", res);
             return res.json();
-        }).catch(function(err){
-            console.log("err",err);
+        }).catch(function (err) {
+            console.log("err", err);
         });
     }
 }

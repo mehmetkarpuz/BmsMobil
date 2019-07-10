@@ -157,9 +157,10 @@ export default class AracListPage extends Component {
         var request = new GetAracDetailsByAracId();
         request.Token = this.state.tokenRequestModel.Token;
         request.AracId = aracId;
-        request.SType = 1;
+        request.SType = 9;
         request.DType = "2";
         this.apiServices.getAracSigortaByAracId(request).then(responseJson => {
+            console.log(responseJson.Data.insurance);
             this.setState({
                 aracSigortaInfo: responseJson.Data.insurance,
             });

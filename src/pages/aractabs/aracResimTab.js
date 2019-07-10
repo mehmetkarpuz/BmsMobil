@@ -59,7 +59,7 @@ export default class AracResimInfoTab extends Component {
         request.startEndDocumentType = "9"; //Image
         request.fileLocationType = "9"; //Image
         request.force = "false";
-        request.image = image;
+        request.image = image.uri;
         request.sigortaID = this.props.aracSigortaInfo.sigortaID;
         request.plaka = this.props.aracSigortaInfo.plaka;
         request.isDateRequired = "false";
