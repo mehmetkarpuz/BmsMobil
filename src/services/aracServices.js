@@ -69,7 +69,6 @@ export default class AracServices {
 
     addImage(request) {
         var formData = new FormData();
-
         formData.append('file', {
             uri : request.image,
             name: 'd1ae8491-4b47-46e3-8b1f-60cee4af1d7f.jpg',
@@ -85,7 +84,6 @@ export default class AracServices {
         formData.append('sigortaID', request.sigortaID);
         formData.append('plaka', request.plaka);
         formData.append('isDateRequired', request.isDateRequired);
-        console.log("request", request);
         return fetch(this.env.ServiceUrl + 'Puntaj/AddWehicleImage', {
             method: 'POST',
             headers: {

@@ -253,7 +253,7 @@ export default class AracListPage extends Component {
                                     <AracInfoTab aracDetailResponse={this.state.aracDetailResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon name="camera" /></TabHeading>}>
-                                    <AracResimInfoTab aracSigortaInfo={this.state.aracSigortaInfo} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracResimlerResponse={this.state.aracResimlerResponse} />
+                                    <AracResimInfoTab reloadAracResimler={this.getAracResimler} aracSigortaInfo={this.state.aracSigortaInfo} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracResimlerResponse={this.state.aracResimlerResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="vcard" /></TabHeading>}>
                                     <AracRuhsatTab aracRuhsatResimlerResponse={this.state.aracRuhsatResimlerResponse} />

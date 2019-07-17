@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import {
     Container, Content,
-    Text, Thumbnail,Button
+    Text, Thumbnail, Button
 } from 'native-base';
-import { Image, Dimensions, ScrollView,Alert } from 'react-native';
+import { Image, Dimensions, ScrollView, Alert } from 'react-native';
 import ImageZoom from 'react-native-image-pan-zoom';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { ImagePicker, Permissions } from 'expo';
 import AracServices from '../../services/aracServices';
 import AddWehicleImageRequestModel from '../../models/addWehicleImageRequestModel';
+import ImageBrowser from 'react-native-interactive-image-gallery'
 
 
 export default class AracResimInfoTab extends Component {
-    
+
     apiServices = new AracServices();
 
     state = {
@@ -22,7 +23,7 @@ export default class AracResimInfoTab extends Component {
     constructor(props) {
         super(props);
     }
-    
+
     pickImage = async () => {
         await this.getPermissionAsync();
     }
@@ -49,7 +50,7 @@ export default class AracResimInfoTab extends Component {
         }
     }
 
-    addImage(image){
+    addImage(image) {
         var request = new AddWehicleImageRequestModel();
         request.Token = this.props.token;
         request.ID = this.props.aracSigortaInfo.ID;
@@ -64,7 +65,7 @@ export default class AracResimInfoTab extends Component {
         request.plaka = this.props.aracSigortaInfo.plaka;
         request.isDateRequired = "false";
         this.apiServices.addImage(request).then(responseJson => {
-            console.log(responseJson);
+            this.props.reloadAracResimler(this.props.selectedAracId);
             if (responseJson.IsSuccess) {
                 Alert.alert("İşlem başarılı");
             }
@@ -79,37 +80,27 @@ export default class AracResimInfoTab extends Component {
     render() {
         var images = [];
 
-        if (this.props.aracResimlerResponse != null) {
-            for (let i = 0; i < this.props.aracResimlerResponse.length; i++) {
-                images.push(
-                    <Col size={30} style={{ marginTop: 10, marginLeft: 1, marginRight: 1 }}>
-                        <Image
-                            style={{ width: 150, height: 150 }}
-                            source={{ uri: this.props.aracResimlerResponse[i].fullPath }}>
-                        </Image>
-                        {/* <ImageZoom cropWidth={Dimensions.get('window').width}
-                                    cropHeight={Dimensions.get('window').width}
-                                    imageWidth={150}
-                                    imageHeight={150}>
-                                    <Image style={{ width: 150, height: 150 }}
-                                        source={{ uri: this.props.aracResimlerResponse[i].fullPath }} />
-                                </ImageZoom> */}
-                    </Col>
-                )
-            }
-        }
+        const imageURLs = this.props.aracResimlerResponse.map(
+            (img, index) => ({
+                URI: img.fullPath,
+                thumbnail: img.fullPath,
+                id: String(index),
+                title: "",
+                description: ""
+            })
+        )
 
         return (
             <ScrollView vertical={true}>
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
-                    <Row size={10} style={{ marginBottom: 5 }}>
+                        <Row size={10} style={{ marginBottom: 5 }}>
                             <Button full light onPress={() => this.pickImage()}>
-                                <Text>Resim Ekle</Text>
-                            </Button>                               
+                                <Text>Yeni Resim Ekle</Text>
+                            </Button>
                         </Row>
-                        <Row size={90}>
-                            {images}
+                        <Row size={80}>
+                            <ImageBrowser images={imageURLs} />
                         </Row>
                     </Grid>
                 </Content>
