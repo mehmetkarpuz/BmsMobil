@@ -83,7 +83,9 @@ export default class AracServices {
         formData.append('force', request.force);
         formData.append('sigortaID', request.sigortaID);
         formData.append('plaka', request.plaka);
+        formData.append('ID', request.ID);
         formData.append('isDateRequired', request.isDateRequired);
+        console.log("formData",formData);
         return fetch(this.env.ServiceUrl + 'Puntaj/AddWehicleImage', {
             method: 'POST',
             headers: {
@@ -95,6 +97,7 @@ export default class AracServices {
             console.log("res", res);
             return res.json();
         }).catch(function (err) {
+            console.log("err", err.message);
             console.log("err", err);
         });
     }

@@ -51,11 +51,16 @@ export default class AracListPage extends Component {
                 }
             },
             aracResimlerResponse: [],
+            aracRuhsatResponse: {},
             aracRuhsatResimlerResponse: [],
             aracSigortaResimlerResponse: [],
             aracImmsResimlerResponse: [],
-            aracSigortaInfo:{}
+            aracSigortaInfo: {},
+            aracSigortaSigortaInfo: {},
         };
+
+        this.getAracResimler = this.getAracResimler.bind(this);
+        this.getAracRuhsat = this.getAracRuhsat.bind(this);
     }
 
     async componentWillMount() {
@@ -111,9 +116,9 @@ export default class AracListPage extends Component {
                     aracDetailResponse: responseJson.Data.wehicleList[0]
                 });
                 this.getAracResimler(aracId);
-                 this.getAracRuhsat(aracId);
-                 this.getAracSigorta(aracId);
-                 this.getAracImms(aracId);
+                this.getAracRuhsat(aracId);
+                this.getAracSigorta(aracId);
+                this.getAracImms(aracId);
             }
         }).catch((error) => {
             console.error(error);
@@ -127,11 +132,16 @@ export default class AracListPage extends Component {
         request.SType = "9";
         request.DType = "9";
         this.apiServices.getAracResimlerByAracId(request).then(responseJson => {
-            if (responseJson.Data.imageList.length > 0) {
+            if (responseJson.Data) {
                 this.setState({
-                    aracResimlerResponse: responseJson.Data.imageList,
+                    aracSigortaInfo: responseJson.Data.insurance,
                 });
-            }
+                if (responseJson.Data.imageList.length > 0) {
+                    this.setState({
+                        aracResimlerResponse: responseJson.Data.imageList,
+                    });
+                }
+            }           
         }).catch((error) => {
             console.error(error);
         });
@@ -142,12 +152,17 @@ export default class AracListPage extends Component {
         request.Token = this.state.tokenRequestModel.Token;
         request.AracId = aracId;
         this.apiServices.getAracRuhsatByAracId(request).then(responseJson => {
-
-            if (responseJson.Data.imageList.length > 0) {
+            if (responseJson.Data) {
                 this.setState({
-                    aracRuhsatResimlerResponse: responseJson.Data.imageList,
+                    aracRuhsatResponse: responseJson.Data.ruhsat
                 });
+                if (responseJson.Data.imageList.length > 0) {
+                    this.setState({
+                        aracRuhsatResimlerResponse: responseJson.Data.imageList
+                    });
+                }
             }
+
         }).catch((error) => {
             console.error(error);
         });
@@ -157,17 +172,17 @@ export default class AracListPage extends Component {
         var request = new GetAracDetailsByAracId();
         request.Token = this.state.tokenRequestModel.Token;
         request.AracId = aracId;
-        request.SType = 9;
+        request.SType = 1;
         request.DType = "2";
         this.apiServices.getAracSigortaByAracId(request).then(responseJson => {
-            console.log(responseJson.Data.insurance);
-            this.setState({
-                aracSigortaInfo: responseJson.Data.insurance,
-            });
-            if (responseJson.Data.imageList.length > 0) {
-                this.setState({
-                    aracSigortaResimlerResponse: responseJson.Data.imageList,
-                });
+            if (responseJson.Data) {
+                if (responseJson.Data.imageList.length > 0) {
+                    console.log("sigorta",responseJson.Data);
+                    this.setState({
+                        aracSigortaResimlerResponse: responseJson.Data.imageList,
+                        aracSigortaSigortaInfo : responseJson.Data.insurance
+                    });
+                }
             }
         }).catch((error) => {
             console.error(error);
@@ -181,11 +196,13 @@ export default class AracListPage extends Component {
         request.SType = 2;
         request.DType = "3";
         this.apiServices.getAracSigortaByAracId(request).then(responseJson => {
-            if (responseJson.Data.imageList.length > 0) {
-                this.setState({
-                    aracImmsResimlerResponse: responseJson.Data.imageList,
-                });
-            }
+            if (responseJson.Data) {
+                if (responseJson.Data.imageList.length > 0) {
+                    this.setState({
+                        aracImmsResimlerResponse: responseJson.Data.imageList,
+                    });
+                }
+            }           
         }).catch((error) => {
             console.error(error);
         });
@@ -256,10 +273,10 @@ export default class AracListPage extends Component {
                                     <AracResimInfoTab reloadAracResimler={this.getAracResimler} aracSigortaInfo={this.state.aracSigortaInfo} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracResimlerResponse={this.state.aracResimlerResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="vcard" /></TabHeading>}>
-                                    <AracRuhsatTab aracRuhsatResimlerResponse={this.state.aracRuhsatResimlerResponse} />
+                                    <AracRuhsatTab reloadAracRuhsatResimler={this.getAracRuhsat} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracRuhsatResponse={this.state.aracRuhsatResponse} aracRuhsatResimlerResponse={this.state.aracRuhsatResimlerResponse} />
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="shield" /></TabHeading>}>
-                                    <AracSigortaTab aracSigortaResimlerResponse={this.state.aracSigortaResimlerResponse}></AracSigortaTab>
+                                    <AracSigortaTab reloadAracSigortaResimler={this.getAracSigorta} token={this.state.tokenRequestModel.Token} aracSigortaResimlerResponse={this.state.aracSigortaResimlerResponse} aracSigortaSigortaInfo={this.state.aracSigortaSigortaInfo} selectedAracId={this.state.selectedAracId}></AracSigortaTab>
                                 </Tab>
                                 <Tab heading={<TabHeading><Icon type="FontAwesome" name="car" /></TabHeading>}>
                                     <AracIMMSTab aracImmsResimlerResponse={this.state.aracImmsResimlerResponse}></AracIMMSTab>
@@ -304,9 +321,9 @@ export default class AracListPage extends Component {
                                 renderRow={(item, sectionID, rowID, higlightRow) =>
                                     <ListItem style={{ padding: 0 }} onPress={() => {
                                         this.setState({
-                                            isAracListModalVisible: false
+                                            isAracListModalVisible: false,
+                                            selectedAracId: item.AracId
                                         });
-                                        this.state.selectedAracId = item.AracId;
                                         this.getAracDetails(item.AracId);
                                     }}>
                                         <Col size={35} style={{ alignContent: "center" }}>
