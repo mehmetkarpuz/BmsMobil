@@ -67,6 +67,18 @@ export default class AracServices {
         });
     }
 
+    getGuzergahIzinByAracId(request) {
+        return fetch(this.env.ServiceUrl + 'Puntaj/GetGuzergahIzinByAracId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        }).then(function (res) {
+            return res.json();
+        });
+    }
+
     addImage(request) {
         var formData = new FormData();
         formData.append('file', {

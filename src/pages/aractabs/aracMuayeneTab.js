@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import {
     Container, Content,
-    Text, Thumbnail, Button, Icon, DatePicker
+    Text, Thumbnail,Button,Icon, DatePicker
 } from 'native-base';
-import { Image, Dimensions, ScrollView, Alert, Modal } from 'react-native';
+import { Image, Dimensions,ScrollView,Alert,Modal } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AracServices from '../../services/aracServices';
 import AddWehicleImageRequestModel from '../../models/addWehicleImageRequestModel';
 import Utils from '../../common/utils';
 import ImageBrowser from 'react-native-interactive-image-gallery'
 
-export default class AracSigortaTab extends Component {
+export default class AracMuayeneTab extends Component {
+
     apiServices = new AracServices();
     utils = new Utils();
     constructor(props) {
         super(props);
         this.state = {
-            sigortaAddModalVisible: false,
+            muayeneAddModalVisible: false,
             datePickerDefaultDate: new Date(),
             chosenStartDate: new Date(),
             chosenEndDate: new Date(),
@@ -28,22 +29,22 @@ export default class AracSigortaTab extends Component {
         this.setState({ selectedImageUri: image.uri })
     }
 
-    addSigortaImage() {
+    addMuayeneImage() {
         var request = new AddWehicleImageRequestModel();
         request.Token = this.props.token;
-        request.ID = this.props.aracSigortaSigortaInfo.ID;
+        request.ID = this.props.aracMuayeneResponse.ID;
         request.startDate = this.state.chosenStartDate.toString();
         request.endDate = this.state.chosenEndDate.toString();
         request.entryID = this.props.selectedAracId;
-        request.startEndDocumentType = "2"; //Sigorta
-        request.fileLocationType = "2"; //Sigorta
+        request.startEndDocumentType = "4"; //Muayene
+        request.fileLocationType = "4"; //Muayene
         request.force = "false";
         request.image = this.state.selectedImageUri;
-        request.sigortaID = this.props.aracSigortaSigortaInfo.sigortaID;
-        request.plaka = this.props.aracSigortaSigortaInfo.plaka;
+        request.sigortaID = this.props.aracMuayeneResponse.sigortaID;
+        request.plaka = this.props.aracMuayeneResponse.plaka;
         request.isDateRequired = "false";
         this.apiServices.addImage(request).then(responseJson => {
-            this.props.reloadAracSigortaResimler(this.props.selectedAracId);
+            this.props.reloadAracMuayeneResimler(this.props.selectedAracId);
             if (responseJson.IsSuccess) {
                 Alert.alert("İşlem başarılı");
             }
@@ -56,7 +57,7 @@ export default class AracSigortaTab extends Component {
     }
 
     render() {
-        const imageURLs = this.props.aracSigortaResimlerResponse.map(
+        const imageURLs = this.props.aracMuayeneResimlerResponse.map(
             (img, index) => ({
                 URI: img.fullPath,
                 thumbnail: img.fullPath,
@@ -71,8 +72,8 @@ export default class AracSigortaTab extends Component {
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
                         <Row size={10} style={{ marginBottom: 5 }}>
-                            <Button full light onPress={() => this.setState({ sigortaAddModalVisible: true })}>
-                                <Text>Yeni Sigorta Ekle</Text>
+                        <Button full light onPress={() => this.setState({ muayeneAddModalVisible: true })}>
+                                <Text>Yeni Muayene Ekle</Text>
                             </Button>
                         </Row>
                         <Row size={80}>
@@ -83,7 +84,7 @@ export default class AracSigortaTab extends Component {
                 <Modal
                     animationType="fade"
                     transparent={false}
-                    visible={this.state.sigortaAddModalVisible}
+                    visible={this.state.muayeneAddModalVisible}
                     onRequestClose={() => {
                     }}>
                     <Content>
@@ -92,7 +93,7 @@ export default class AracSigortaTab extends Component {
                                 <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
                                     <Button danger onPress={() => {
                                         this.setState({
-                                            sigortaAddModalVisible: false
+                                            muayeneAddModalVisible: false
                                         });
                                     }}>
                                         <Icon name='close' />
@@ -148,7 +149,7 @@ export default class AracSigortaTab extends Component {
                             </Row>
                             <Row size={20}>
                                 <Col size={50}>
-                                    <Button full light onPress={() => this.addSigortaImage()}>
+                                    <Button full light onPress={() => this.addMuayeneImage()}>
                                         <Text>Kaydet</Text>
                                     </Button>
                                 </Col>

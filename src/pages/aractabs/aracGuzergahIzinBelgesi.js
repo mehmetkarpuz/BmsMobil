@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import {
     Container, Content,
-    Text, Thumbnail, Button, Icon, DatePicker
+    Text, Thumbnail,Button,Icon, DatePicker
 } from 'native-base';
-import { Image, Dimensions, ScrollView, Alert, Modal } from 'react-native';
+import { Image, Dimensions,ScrollView,Alert,Modal } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AracServices from '../../services/aracServices';
 import AddWehicleImageRequestModel from '../../models/addWehicleImageRequestModel';
 import Utils from '../../common/utils';
 import ImageBrowser from 'react-native-interactive-image-gallery'
+import moment from 'moment';
 
-export default class AracSigortaTab extends Component {
+
+export default class AracGuzergahIzinTab extends Component {
+
     apiServices = new AracServices();
     utils = new Utils();
     constructor(props) {
         super(props);
         this.state = {
-            sigortaAddModalVisible: false,
+            guzergahIzinAddModalVisible: false,
             datePickerDefaultDate: new Date(),
             chosenStartDate: new Date(),
             chosenEndDate: new Date(),
@@ -28,22 +31,24 @@ export default class AracSigortaTab extends Component {
         this.setState({ selectedImageUri: image.uri })
     }
 
-    addSigortaImage() {
+    addGuzergahImage() {
         var request = new AddWehicleImageRequestModel();
+        var start = moment(this.state.chosenStartDate).format("DD-MM-YYYY");
+        var end = moment(this.state.chosenEndDate).format("DD-MM-YYYY");
         request.Token = this.props.token;
-        request.ID = this.props.aracSigortaSigortaInfo.ID;
-        request.startDate = this.state.chosenStartDate.toString();
-        request.endDate = this.state.chosenEndDate.toString();
+        request.ID = this.props.aracGuzergahResponse.ID;
+        request.startDate = start.toString();
+        request.endDate = end.toString();
         request.entryID = this.props.selectedAracId;
-        request.startEndDocumentType = "2"; //Sigorta
-        request.fileLocationType = "2"; //Sigorta
+        request.startEndDocumentType = "5"; //Guzergah
+        request.fileLocationType = "5"; //Guzergah
         request.force = "false";
         request.image = this.state.selectedImageUri;
-        request.sigortaID = this.props.aracSigortaSigortaInfo.sigortaID;
-        request.plaka = this.props.aracSigortaSigortaInfo.plaka;
+        request.sigortaID = this.props.aracGuzergahResponse.guzargahIzinID;
+        request.plaka = this.props.aracGuzergahResponse.plaka;
         request.isDateRequired = "false";
         this.apiServices.addImage(request).then(responseJson => {
-            this.props.reloadAracSigortaResimler(this.props.selectedAracId);
+            this.props.reloadAracGuzergahResimler(this.props.selectedAracId);
             if (responseJson.IsSuccess) {
                 Alert.alert("İşlem başarılı");
             }
@@ -56,7 +61,7 @@ export default class AracSigortaTab extends Component {
     }
 
     render() {
-        const imageURLs = this.props.aracSigortaResimlerResponse.map(
+        const imageURLs = this.props.aracGuzergahResimlerResponse.map(
             (img, index) => ({
                 URI: img.fullPath,
                 thumbnail: img.fullPath,
@@ -71,8 +76,8 @@ export default class AracSigortaTab extends Component {
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
                         <Row size={10} style={{ marginBottom: 5 }}>
-                            <Button full light onPress={() => this.setState({ sigortaAddModalVisible: true })}>
-                                <Text>Yeni Sigorta Ekle</Text>
+                        <Button full light onPress={() => this.setState({ guzergahAddModalVisible: true })}>
+                                <Text>Yeni Guzergah Ekle</Text>
                             </Button>
                         </Row>
                         <Row size={80}>
@@ -83,7 +88,7 @@ export default class AracSigortaTab extends Component {
                 <Modal
                     animationType="fade"
                     transparent={false}
-                    visible={this.state.sigortaAddModalVisible}
+                    visible={this.state.guzergahAddModalVisible}
                     onRequestClose={() => {
                     }}>
                     <Content>
@@ -92,7 +97,7 @@ export default class AracSigortaTab extends Component {
                                 <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
                                     <Button danger onPress={() => {
                                         this.setState({
-                                            sigortaAddModalVisible: false
+                                            guzergahAddModalVisible: false
                                         });
                                     }}>
                                         <Icon name='close' />
@@ -148,7 +153,7 @@ export default class AracSigortaTab extends Component {
                             </Row>
                             <Row size={20}>
                                 <Col size={50}>
-                                    <Button full light onPress={() => this.addSigortaImage()}>
+                                    <Button full light onPress={() => this.addGuzergahImage()}>
                                         <Text>Kaydet</Text>
                                     </Button>
                                 </Col>
