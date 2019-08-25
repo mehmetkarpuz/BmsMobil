@@ -127,7 +127,7 @@ export default class AracListPage extends Component {
                 this.getAracSigorta(aracId);
                 this.getAracImms(aracId);
                 this.getAracMuayene(aracId);
-                this.getAracGuzergah(aracId);
+                this.getAracGuzergah(aracId);                
             }
         }).catch((error) => {
             console.error(error);
@@ -283,7 +283,7 @@ export default class AracListPage extends Component {
 
         return (
             <Container>
-                <Header hasTabs />
+                <Header style={{ backgroundColor: '#37bcc7' }} hasTabs />
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
                         <Row size={20} style={{ marginBottom: 10 }}>
@@ -318,26 +318,26 @@ export default class AracListPage extends Component {
                             </Col>
                         </Row>
                         <Row>
-                            <Tabs initialPage={-1} locked="true">
-                                <Tab heading={<TabHeading><Icon name="bus" /></TabHeading>}>
+                            <Tabs initialPage={0} locked="true">
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="file-text" /></TabHeading>}>
                                     <AracInfoTab aracDetailResponse={this.state.aracDetailResponse} />
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon name="camera" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="bus" /></TabHeading>}>
                                     <AracResimInfoTab reloadAracResimler={this.getAracResimler} aracSigortaInfo={this.state.aracSigortaInfo} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracResimlerResponse={this.state.aracResimlerResponse} />
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon type="FontAwesome" name="vcard" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="vcard" /></TabHeading>}>
                                     <AracRuhsatTab reloadAracRuhsatResimler={this.getAracRuhsat} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId} aracRuhsatResponse={this.state.aracRuhsatResponse} aracRuhsatResimlerResponse={this.state.aracRuhsatResimlerResponse} />
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon type="FontAwesome" name="shield" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="shield" /></TabHeading>}>
                                     <AracSigortaTab reloadAracSigortaResimler={this.getAracSigorta} token={this.state.tokenRequestModel.Token} aracSigortaResimlerResponse={this.state.aracSigortaResimlerResponse} aracSigortaSigortaInfo={this.state.aracSigortaSigortaInfo} selectedAracId={this.state.selectedAracId}></AracSigortaTab>
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon type="FontAwesome" name="car" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="Entypo" name="shield" /></TabHeading>}>
                                     <AracIMMSTab reloadAracImmsResimler={this.getAracImms} aracImmsResponse={this.state.aracImmsResponse} aracImmsResimlerResponse={this.state.aracImmsResimlerResponse} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId}></AracIMMSTab>
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon type="FontAwesome" name="hospital-o" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="MaterialCommunityIcons" name="car-wash" /></TabHeading>}>
                                     <AracMuayeneTab reloadAracMuayeneResimler={this.getAracMuayene} aracMuayeneResponse={this.state.aracMuayeneResponse} aracMuayeneResimlerResponse={this.state.aracMuayeneResimlerResponse} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId}></AracMuayeneTab>
                                 </Tab>
-                                <Tab heading={<TabHeading><Icon type="FontAwesome" name="file-text" /></TabHeading>}>
+                                <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="road" /></TabHeading>}>
                                     <AracGuzergahIzinTab reloadAracGuzergahResimler={this.getAracGuzergah} aracGuzergahResponse={this.state.aracGuzergahResponse} aracGuzergahResimlerResponse={this.state.aracGuzergahResimlerResponse} token={this.state.tokenRequestModel.Token} selectedAracId={this.state.selectedAracId}></AracGuzergahIzinTab>
                                 </Tab>
                             </Tabs>
@@ -380,6 +380,7 @@ export default class AracListPage extends Component {
                                             selectedAracId: item.AracId
                                         });
                                         this.getAracDetails(item.AracId);
+                                        this.setState({ searchTerm: item.Plaka })
                                     }}>
                                         <Col size={35} style={{ alignContent: "center" }}>
                                             <Row size={100}><Text>{item.Plaka}</Text></Row>

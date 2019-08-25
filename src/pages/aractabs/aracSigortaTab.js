@@ -70,12 +70,21 @@ export default class AracSigortaTab extends Component {
             <ScrollView vertical={true}>
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Plaka : </Text>{this.props.aracSigortaSigortaInfo.plaka}</Text>
+                        </Row>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Baş. Tarihi : </Text>{this.props.aracSigortaSigortaInfo.sigorta_baslangic}</Text>
+                        </Row>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Bit. Tarihi : </Text>{this.props.aracSigortaSigortaInfo.sigorta_bitis}</Text>
+                        </Row>
                         <Row size={10} style={{ marginBottom: 5 }}>
                             <Button full light onPress={() => this.setState({ sigortaAddModalVisible: true })}>
                                 <Text>Yeni Sigorta Ekle</Text>
                             </Button>
                         </Row>
-                        <Row size={80}>
+                        <Row size={75}>
                             <ImageBrowser images={imageURLs} />
                         </Row>
                     </Grid>
@@ -87,8 +96,13 @@ export default class AracSigortaTab extends Component {
                     onRequestClose={() => {
                     }}>
                     <Content>
-                        <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 50 }}>
-                            <Row size={5} style={{ paddingLeft: 20,marginBottom: 10, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
+                        <Grid style={{ paddingLeft: 5, paddingRight: 5 }}>
+                            <Row size={10}>
+                                <Content style={{ backgroundColor: '#37bcc7' }}>
+                                   
+                                </Content>
+                            </Row>
+                            <Row size={5} style={{ paddingLeft: 20, marginBottom: 10, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
                                 <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
                                     <Button danger onPress={() => {
                                         this.setState({

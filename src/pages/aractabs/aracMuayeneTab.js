@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {
     Container, Content,
-    Text, Thumbnail,Button,Icon, DatePicker
+    Text, Thumbnail, Button, Icon, DatePicker
 } from 'native-base';
-import { Image, Dimensions,ScrollView,Alert,Modal } from 'react-native';
+import { Image, Dimensions, ScrollView, Alert, Modal } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import AracServices from '../../services/aracServices';
 import AddWehicleImageRequestModel from '../../models/addWehicleImageRequestModel';
@@ -71,8 +71,17 @@ export default class AracMuayeneTab extends Component {
             <ScrollView vertical={true}>
                 <Content>
                     <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 2 }}>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Plaka : </Text>{this.props.aracMuayeneResponse.plaka}</Text>
+                        </Row>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Baş. Tarihi : </Text>{this.props.aracMuayeneResponse.sigorta_baslangic}</Text>
+                        </Row>
+                        <Row size={5} style={{ marginBottom: 5, alignContent: "center", alignItems: "center" }}>
+                            <Text> <Text style={{ fontWeight: "bold" }}>Bit. Tarihi : </Text>{this.props.aracMuayeneResponse.sigorta_bitis}</Text>
+                        </Row>                       
                         <Row size={10} style={{ marginBottom: 5 }}>
-                        <Button full light onPress={() => this.setState({ muayeneAddModalVisible: true })}>
+                            <Button full light onPress={() => this.setState({ muayeneAddModalVisible: true })}>
                                 <Text>Yeni Muayene Ekle</Text>
                             </Button>
                         </Row>
@@ -89,7 +98,7 @@ export default class AracMuayeneTab extends Component {
                     }}>
                     <Content>
                         <Grid style={{ paddingLeft: 5, paddingRight: 5, paddingTop: 50 }}>
-                            <Row size={5} style={{ paddingLeft: 20,marginBottom: 10, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
+                            <Row size={5} style={{ paddingLeft: 20, marginBottom: 10, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
                                 <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
                                     <Button danger onPress={() => {
                                         this.setState({

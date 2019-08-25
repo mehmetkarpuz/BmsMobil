@@ -16,7 +16,10 @@ export default class LoginServices {
             },
             body: JSON.stringify(loginModel),
         }).then(function (res) {
+            console.log("res", res);
             return res.json();
+        }).catch(function (err) {
+            console.log("err", err);
         });
     }
 
