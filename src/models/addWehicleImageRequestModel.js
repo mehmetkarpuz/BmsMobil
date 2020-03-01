@@ -12,4 +12,5 @@ export default class AddWehicleImageRequestModel extends TokenRequestModel {
     entryID = "";
     isDateRequired = "";
     image = "";
+    isUpdate = true;
 }

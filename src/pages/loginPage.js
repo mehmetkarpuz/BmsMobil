@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Alert, Image, Text, ActivityIndicator } from 'react-native';
-import { Container, Header, Content, Item, Input, Icon, Button } from 'native-base';
+import { Container, Header, Content, Item, Icon ,Input, Button } from 'native-base';
 import LoginService from '../services/loginService';
 import { navigation } from 'react-navigation';
 import { Col, Row, Grid } from 'react-native-easy-grid';
@@ -60,7 +60,7 @@ export default class LoginPage extends Component {
                         <Row size={20} style={{ marginBottom: 5 }}>
                             <Col size={100}>
                                 <Item>
-                                    <Icon style={{ color: '#E9E5E4', padding: 0 }} name="person-outline"></Icon>
+                                    <Icon style={{ color: '#E9E5E4', padding: 0 }} name="md-person"></Icon>
                                     <Input value={this.state.userName}
                                         onChangeText={(value) => this.setState({ userName: value })}
                                         placeholder='Email' />

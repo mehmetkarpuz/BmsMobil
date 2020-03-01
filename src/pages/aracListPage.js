@@ -17,6 +17,8 @@ import AracIMMSTab from './aractabs/aracIMMSTab';
 import AracMuayeneTab from './aractabs/aracMuayeneTab';
 import AracGuzergahIzinTab from './aractabs/aracGuzergahIzinBelgesi';
 import GetAracDetailsByAracId from '../models/getAracDetailsByAracId';
+import { navigation } from 'react-navigation';
+
 
 
 export default class AracListPage extends Component {
@@ -63,19 +65,26 @@ export default class AracListPage extends Component {
             aracGuzergahResponse: {},
             aracGuzergahResimlerResponse: [],
             aracSigortaInfo: {},
-            aracSigortaSigortaInfo: {},
+            aracSigortaSigortaInfo: {}
         };
 
         this.getAracResimler = this.getAracResimler.bind(this);
         this.getAracRuhsat = this.getAracRuhsat.bind(this);
+
+        console.log(props);
+        var params = props.navigation.state.params;
+        if (params != undefined && params != null) {
+            if (!params.newArac && params.newArac.wehicleList > 0) {
+                this.setState({ searchTerm: params.newArac.wehicleList[0].plaka });
+            }
+        }
     }
 
     async componentWillMount() {
-        await Expo.Font.loadAsync({
-            Roboto: require("native-base/Fonts/Roboto.ttf"),
-            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
-            Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
-        });
+        // await Expo.Font.loadAsync({
+        //     Roboto: require("../../node_modules/native-base/Fonts/Roboto.ttf"),
+        //     Roboto_medium: require("../../node_modules/native-base/Fonts/Roboto_medium.ttf"),
+        // });
         this.setState({ loading: false });
     }
 
@@ -91,6 +100,7 @@ export default class AracListPage extends Component {
 
     componentDidMount() {
         this.GetUserData();
+
     }
 
     getAracListBySearchTerm() {
@@ -127,7 +137,7 @@ export default class AracListPage extends Component {
                 this.getAracSigorta(aracId);
                 this.getAracImms(aracId);
                 this.getAracMuayene(aracId);
-                this.getAracGuzergah(aracId);                
+                this.getAracGuzergah(aracId);
             }
         }).catch((error) => {
             console.error(error);
@@ -197,6 +207,10 @@ export default class AracListPage extends Component {
         });
     }
 
+    onNewArac = data => {
+        this.setState(data);
+    };
+
     getAracImms(aracId) {
         var request = new GetAracDetailsByAracId();
         request.Token = this.state.tokenRequestModel.Token;
@@ -246,10 +260,10 @@ export default class AracListPage extends Component {
         request.Token = this.state.tokenRequestModel.Token;
         request.AracId = aracId;
         this.apiServices.getGuzergahIzinByAracId(request).then(responseJson => {
-            if (responseJson.Data) {             
+            if (responseJson.Data) {
                 this.setState({
                     aracGuzergahResponse: responseJson.Data.guzergahIzin
-                }); 
+                });
                 if (responseJson.Data.imageList.length > 0) {
                     this.setState({
                         aracGuzergahResimlerResponse: responseJson.Data.imageList
@@ -280,7 +294,9 @@ export default class AracListPage extends Component {
     // }
 
     render() {
-
+        if (this.state.loading) {
+            return <Expo.AppLoading />;
+        }
         return (
             <Container>
                 <Header style={{ backgroundColor: '#37bcc7' }} hasTabs />
@@ -301,14 +317,14 @@ export default class AracListPage extends Component {
                             </Col>
                         </Row>
                         <Row size={5} style={{ marginBottom: 5 }}>
-                            <Col size={55} style={{ borderWidth: 1, borderColor: '#d6d7da', marginBottom: 5 }}>
+                            <Col size={35} style={{ borderWidth: 1, borderColor: '#d6d7da', marginBottom: 5 }}>
                                 <TextInput
                                     onChangeText={(text) => this.setState({ searchTerm: text })}
                                     value={this.state.searchTerm}
                                 />
                             </Col>
-                            <Col size={5}></Col>
-                            <Col size={40} style={{
+                            <Col size={2}></Col>
+                            <Col size={25} style={{
                                 backgroundColor: '#fffff',
                                 justifyContent: 'flex-start', alignItems: 'flex-start'
                             }}>
@@ -316,9 +332,18 @@ export default class AracListPage extends Component {
                                     <Text>GETİR</Text>
                                 </Button>
                             </Col>
+                            <Col size={5}></Col>
+                            <Col size={30} style={{
+                                backgroundColor: '#fffff',
+                                justifyContent: 'flex-start', alignItems: 'flex-start'
+                            }}>
+                                <Button full light onPress={() => this.props.navigation.navigate('YeniArac',{ onNewArac: this.onNewArac })}>
+                                    <Text>YENi ARAÇ</Text>
+                                </Button>
+                            </Col>
                         </Row>
                         <Row>
-                            <Tabs initialPage={0} locked="true">
+                            <Tabs initialPage={0}>
                                 <Tab heading={<TabHeading style={{ backgroundColor: '#37bcc7' }}><Icon type="FontAwesome" name="file-text" /></TabHeading>}>
                                     <AracInfoTab aracDetailResponse={this.state.aracDetailResponse} />
                                 </Tab>
@@ -350,8 +375,8 @@ export default class AracListPage extends Component {
                     visible={this.state.isAracListModalVisible}
                     onRequestClose={() => {
                     }}>
-                    <Row size={5} style={{ paddingLeft: 20, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
-                        <Content style={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
+                    <Row size={5} contentContainerStyle={{ paddingLeft: 20, marginTop: 10, justifyContent: "flex-end", alignContent: "flex-end" }}>
+                        <Content contentContainerStyle={{ justifyContent: "flex-end", alignContent: "flex-end" }}>
                             <Button danger onPress={() => {
                                 this.setState({
                                     isAracListModalVisible: false

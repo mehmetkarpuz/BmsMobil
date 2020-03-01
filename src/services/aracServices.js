@@ -67,6 +67,54 @@ export default class AracServices {
         });
     }
 
+    getCapacityList(request) {
+        return fetch(this.env.ServiceUrl + 'Wehicle/GetAracCapacityList', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        }).then(function (res) {
+            return res.json();
+        });
+    }
+
+    getModelList(request) {
+        return fetch(this.env.ServiceUrl + 'Wehicle/GetWehicleModelsByBrand', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        }).then(function (res) {
+            return res.json();
+        });
+    }
+
+    getSubContractors(request) {
+        return fetch(this.env.ServiceUrl + 'Wehicle/GetSubContractors', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        }).then(function (res) {
+            return res.json();
+        });
+    }
+
+    insertArac(request) {
+        return fetch(this.env.ServiceUrl + 'Wehicle/InsertWehicle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(request),
+        }).then(function (res) {
+            return res.json();
+        });
+    }
+
     getGuzergahIzinByAracId(request) {
         return fetch(this.env.ServiceUrl + 'Puntaj/GetGuzergahIzinByAracId', {
             method: 'POST',
